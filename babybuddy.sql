@@ -56,7 +56,7 @@ CREATE TABLE reviews (
     FOREIGN KEY (guardian_id) REFERENCES guardians(id)
 );
 
-drop table jobs;
+drop table messages;
 
 CREATE TABLE messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -80,13 +80,59 @@ CREATE TABLE jobs (
     FOREIGN KEY (guardian_id) REFERENCES guardians(id)
 );
 
-SELECT * FROM jobs;
+SELECT * FROM babysitters;
 
 DESCRIBE jobs;
 
 ALTER TABLE jobs ADD COLUMN babysitter_id INT;
 
 DESCRIBE messages;
+
+ALTER TABLE guardians ADD location VARCHAR(255);
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+FLUSH PRIVILEGES;
+
+CREATE TABLE jobs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    date DATETIME,
+    babysitter_id INT,
+    FOREIGN KEY (babysitter_id) REFERENCES babysitters(id)
+);
+
+
+ALTER TABLE messages ADD recipient_id INT NOT NULL;
+
+SHOW TABLES;
+
+CREATE TABLE finances (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    babysitter_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
+    FOREIGN KEY (babysitter_id) REFERENCES babysitters(id)
+);
+
+CREATE TABLE events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_name VARCHAR(255) NOT NULL,
+    event_date DATETIME NOT NULL,
+    location VARCHAR(255),
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE events 
+ADD COLUMN title VARCHAR(255) NOT NULL,
+ADD COLUMN start DATETIME NOT NULL,
+ADD COLUMN end DATETIME NOT NULL,
+ADD COLUMN user_id INT NOT NULL,
+ADD FOREIGN KEY (user_id) REFERENCES babysitters(id);  -- ou guardians(id), dependendo de qual tabela usa o 'user_id'
+
+
 
 
 
